@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>旅サ飲み</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;background:#f7f5f2;color:#1a1a1a;}
+.app{max-width:420px;margin:0 auto;padding:0 0 3rem;}
+.header{text-align:center;padding:2rem 1rem 1.2rem;background:#fff;border-bottom:1px solid #e8e4df;}
+.logo{font-size:24px;font-weight:700;color:#1a1a1a;letter-spacing:0.02em;}
+.logo span{color:#C84B1A;}
+.tagline{font-size:12px;color:#888;margin-top:5px;}
+.section{padding:1.2rem 1rem 0;}
+.section-label{font-size:11px;font-weight:600;color:#888;margin-bottom:8px;letter-spacing:0.08em;}
+.sauna-list{display:flex;flex-direction:column;gap:8px;}
+.sauna-card{background:#fff;border:1px solid #e8e4df;border-radius:12px;padding:12px 14px;cursor:pointer;transition:all 0.15s;}
+.sauna-card:hover{border-color:#C84B1A;}
+.sauna-card.active{border:2px solid #C84B1A;background:#fdf8f6;}
+.sauna-name{font-size:14px;font-weight:600;color:#1a1a1a;}
+.sauna-meta{font-size:12px;color:#888;margin-top:2px;}
+.sauna-link{font-size:11px;color:#C84B1A;margin-top:4px;display:inline-block;text-decoration:none;}
+.sauna-link:hover{text-decoration:underline;}
+.divider{border:none;border-top:1px solid #e8e4df;margin:1.2rem 0 0;}
+.filter-section{padding:1.2rem 1rem 0;}
+.filter-group-label{font-size:11px;font-weight:600;color:#888;margin:0 0 7px;letter-spacing:0.08em;}
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.filter-btn{padding:6px 13px;font-size:12px;border:1px solid #ddd;border-radius:999px;background:#fff;color:#666;cursor:pointer;transition:all 0.15s;}
+.filter-btn:hover{border-color:#C84B1A;color:#C84B1A;}
+.filter-btn.on{background:#C84B1A;border-color:#C84B1A;color:#fff;}
+.filter-btn.kirin.on{background:#003087;border-color:#003087;color:#fff;}
+.filter-btn.asahi.on{background:#CC0000;border-color:#CC0000;color:#fff;}
+.filter-btn.suntory.on{background:#1a5c9e;border-color:#1a5c9e;color:#fff;}
+.filter-btn.sapporo.on{background:#1B5E3B;border-color:#1B5E3B;color:#fff;}
+.filter-btn.smoking.on{background:#555;border-color:#555;color:#fff;}
+.filter-btn.nosmoking.on{background:#2e7d5e;border-color:#2e7d5e;color:#fff;}
+.shop-section{padding:1rem 1rem 0;}
+.shop-section-label{font-size:11px;font-weight:600;color:#888;margin-bottom:8px;letter-spacing:0.08em;}
+.shop-list{display:flex;flex-direction:column;gap:8px;}
+.shop-card{background:#fff;border:1px solid #e8e4df;border-radius:12px;padding:12px 14px;}
+.shop-header{display:flex;justify-content:space-between;align-items:flex-start;}
+.shop-name{font-size:14px;font-weight:600;color:#1a1a1a;}
+.shop-dist{font-size:11px;color:#C84B1A;font-weight:600;}
+.shop-genre{font-size:12px;color:#888;margin-top:3px;}
+.badges{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px;}
+.badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:999px;}
+.badge-senbero{background:#FEF3C7;color:#92400E;}
+.badge-tachi{background:#FDF0EB;color:#7C2D12;}
+.badge-hitori{background:#ECFDF5;color:#065F46;}
+.badge-yakitori{background:#FFF7ED;color:#9A3412;}
+.badge-motsu{background:#FDF4FF;color:#6B21A8;}
+.badge-oden{background:#F0F9FF;color:#0C4A6E;}
+.badge-local{background:#EFF6FF;color:#1E40AF;}
+.badge-kirin{background:#EEF2FF;color:#3730A3;}
+.badge-asahi{background:#FEF2F2;color:#991B1B;}
+.badge-suntory{background:#EFF6FF;color:#1D4ED8;}
+.badge-sapporo{background:#F0FDF4;color:#166534;}
+.badge-smoking{background:#F5F5F5;color:#444;}
+.badge-nosmoking{background:#F0FDF4;color:#166534;}
+.shop-note{font-size:12px;color:#888;margin-top:7px;line-height:1.5;}
+.empty{text-align:center;padding:2.5rem 1rem;font-size:13px;color:#aaa;}
+.select-hint{text-align:center;padding:2.5rem 1rem;font-size:13px;color:#aaa;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="logo">旅サ<span>飲</span>み</div>
+    <div class="tagline">サウナ後、歩いてひとり飲み。</div>
+  </div>
+  <div class="section">
+    <div class="section-label">サウナ施設を選ぶ</div>
+    <div class="sauna-list" id="saunaList"></div>
+  </div>
+  <div class="divider"></div>
+  <div class="filter-section">
+    <div class="filter-group-label">スタイル</div>
+    <div class="filter-row">
+      <button class="filter-btn" onclick="toggleFilter(this,'せんべろ')">せんべろ</button>
+      <button class="filter-btn on" onclick="toggleFilter(this,'立ち飲み')">立ち飲み</button>
+      <button class="filter-btn on" onclick="toggleFilter(this,'おひとり様')">おひとり様</button>
+      <button class="filter-btn" onclick="toggleFilter(this,'焼き鳥')">焼き鳥</button>
+      <button class="filter-btn" onclick="toggleFilter(this,'もつ焼き')">もつ焼き</button>
+      <button class="filter-btn" onclick="toggleFilter(this,'おでん')">おでん</button>
+      <button class="filter-btn" onclick="toggleFilter(this,'チェーン店除外')">チェーン店除外</button>
+    </div>
+    <div class="filter-group-label">ビールメーカー</div>
+    <div class="filter-row">
+      <button class="filter-btn kirin" onclick="toggleFilter(this,'キリン')">🍺 キリン</button>
+      <button class="filter-btn asahi" onclick="toggleFilter(this,'アサヒ')">🍺 アサヒ</button>
+      <button class="filter-btn suntory" onclick="toggleFilter(this,'サントリー')">🍺 サントリー</button>
+      <button class="filter-btn sapporo" onclick="toggleFilter(this,'サッポロ')">🍺 サッポロ</button>
+    </div>
+    <div class="filter-group-label">喫煙</div>
+    <div class="filter-row">
+      <button class="filter-btn smoking" onclick="toggleSmoke(this,'喫煙可')">🚬 喫煙可</button>
+      <button class="filter-btn nosmoking" onclick="toggleSmoke(this,'禁煙')">🚭 禁煙</button>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="shop-section">
+    <div class="shop-section-label" id="shopLabel"></div>
+    <div class="shop-list" id="shopList">
+      <div class="select-hint">サウナ施設を選んでください</div>
+    </div>
+  </div>
+</div>
+<script>
+const saunas=[{id:1,name:'サウナしきじ',city:'静岡市',pref:'静岡',rakuten:'https://travel.rakuten.co.jp/'},{id:2,name:'ウェルビー福岡',city:'福岡市',pref:'福岡',rakuten:'https://travel.rakuten.co.jp/'},{id:3,name:'北欧',city:'上野',pref:'東京',rakuten:'https://travel.rakuten.co.jp/'},{id:4,name:'サウナの梅湯',city:'京都市',pref:'京都',rakuten:'https://travel.rakuten.co.jp/'}];
+const shops={1:[{name:'静岡おでん いけ田',dist:'徒歩3分',genre:'おでん・立ち飲み',tags:['立ち飲み','おひとり様','おでん','地酒','サッポロ','せんべろ'],smoke:'喫煙可',chain:false,note:'静岡黒はんぺん必食。せんべろセットあり'},{name:'やきとり大将',dist:'徒歩5分',genre:'焼き鳥',tags:['立ち飲み','おひとり様','焼き鳥','キリン'],smoke:'禁煙',chain:false,note:'カウンター8席。炭火焼き'},{name:'角打ち 富士見',dist:'徒歩6分',genre:'角打ち・立ち飲み',tags:['立ち飲み','おひとり様','アサヒ','地酒','せんべろ'],smoke:'喫煙可',chain:false,note:'地元酒屋の角打ち。1000円で3杯飲める'},{name:'すき家 静岡店',dist:'徒歩4分',genre:'牛丼',tags:['おひとり様'],smoke:'禁煙',chain:true,note:'深夜営業あり'}],2:[{name:'立ち呑み 博多小町',dist:'徒歩2分',genre:'もつ鍋・立ち飲み',tags:['立ち飲み','おひとり様','もつ焼き','アサヒ','地酒','せんべろ'],smoke:'喫煙可',chain:false,note:'博多もつ鍋が絶品。せんべろ850円'},{name:'屋台 たけちゃん',dist:'徒歩4分',genre:'博多屋台',tags:['立ち飲み','おひとり様','焼き鳥','キリン'],smoke:'喫煙可',chain:false,note:'中洲の名物屋台'},{name:'角打ち 博多の酒',dist:'徒歩3分',genre:'角打ち',tags:['立ち飲み','おひとり様','サッポロ','地酒','せんべろ'],smoke:'禁煙',chain:false,note:'九州の地ビールも。せんべろあり'},{name:'一蘭 中洲店',dist:'徒歩6分',genre:'ラーメン',tags:['おひとり様'],smoke:'禁煙',chain:true,note:'一人用仕切り席'}],3:[{name:'大統領 上野店',dist:'徒歩3分',genre:'もつ焼き・立ち飲み',tags:['立ち飲み','おひとり様','もつ焼き','サッポロ','せんべろ'],smoke:'喫煙可',chain:false,note:'昭和の名店。せんべろ1000円'},{name:'串カツ田中 上野',dist:'徒歩5分',genre:'串カツ',tags:['立ち飲み','おひとり様','アサヒ'],smoke:'禁煙',chain:true,note:'カウンター席あり'},{name:'角打ち 上野商店',dist:'徒歩4分',genre:'角打ち',tags:['立ち飲み','おひとり様','キリン','地酒','せんべろ'],smoke:'喫煙可',chain:false,note:'一番搾り生が旨い'}],4:[{name:'立ち呑み 京極',dist:'徒歩4分',genre:'京料理・立ち飲み',tags:['立ち飲み','おひとり様','地酒','サントリー','せんべろ'],smoke:'禁煙',chain:false,note:'京都地酒が豊富。せんべろあり'},{name:'第三木曜日',dist:'徒歩6分',genre:'角打ち',tags:['立ち飲み','おひとり様','サッポロ'],smoke:'禁煙',chain:false,note:'おしゃれな角打ち'},{name:'麩屋町バル',dist:'徒歩5分',genre:'立ち飲みバル',tags:['立ち飲み','おひとり様','キリン','アサヒ'],smoke:'喫煙可',chain:false,note:'生ビール2種あり'},{name:'新福菜館 本店',dist:'徒歩8分',genre:'ラーメン',tags:['おひとり様'],smoke:'禁煙',chain:false,note:'京都ラーメンの元祖'}]};
+const beerTags=new Set(['キリン','アサヒ','サントリー','サッポロ']);
+const beerBadge={キリン:'badge-kirin',アサヒ:'badge-asahi',サントリー:'badge-suntory',サッポロ:'badge-sapporo'};
+let selectedSauna=null,activeFilters=new Set(['立ち飲み','おひとり様']),smokeFilter=null;
+function renderSaunas(){document.getElementById('saunaList').innerHTML=saunas.map(s=>`<div class="sauna-card${selectedSauna===s.id?' active':''}" onclick="selectSauna(${s.id})"><div class="sauna-name">${s.name}</div><div class="sauna-meta">${s.pref}・${s.city}</div><a class="sauna-link" href="${s.rakuten}" target="_blank">🏨 楽天トラベルで宿を探す →</a></div>`).join('');}
+function selectSauna(id){selectedSauna=id;renderSaunas();renderShops();}
+function toggleFilter(btn,label){if(activeFilters.has(label)){activeFilters.delete(label);btn.classList.remove('on');}else{activeFilters.add(label);btn.classList.add('on');}renderShops();}
+function toggleSmoke(btn,label){if(smokeFilter===label){smokeFilter=null;btn.classList.remove('on');}else{smokeFilter=label;document.querySelectorAll('.filter-btn.smoking,.filter-btn.nosmoking').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}renderShops();}
+function renderShops(){const label=document.getElementById('shopLabel'),list=document.getElementById('shopList');if(!selectedSauna){label.textContent='';list.innerHTML='<div class="select-hint">サウナ施設を選んでください</div>';return;}const sauna=saunas.find(s=>s.id===selectedSauna);label.textContent=sauna.name+' 周辺のサ飯スポット';const activeBeer=[...activeFilters].filter(f=>beerTags.has(f));const excludeChain=activeFilters.has('チェーン店除外');const styleFilters=[...activeFilters].filter(f=>!beerTags.has(f)&&f!=='チェーン店除外');let filtered=shops[selectedSauna].filter(s=>{if(excludeChain&&s.chain)return false;if(smokeFilter&&s.smoke!==smokeFilter)return false;const styleOk=styleFilters.length===0||styleFilters.every(f=>s.tags.includes(f));const beerOk=activeBeer.length===0||activeBeer.some(f=>s.tags.includes(f));return styleOk&&beerOk;});if(filtered.length===0){list.innerHTML='<div class="empty">条件に合うお店が見つかりません</div>';return;}list.innerHTML=filtered.map(s=>{const beerTag=s.tags.find(t=>beerTags.has(t));return`<div class="shop-card"><div class="shop-header"><div class="shop-name">${s.name}</div><div class="shop-dist">${s.dist}</div></div><div class="shop-genre">${s.genre}</div><div class="badges">${s.tags.includes('せんべろ')?'<span class="badge badge-senbero">せんべろ</span>':''}${s.tags.includes('立ち飲み')?'<span class="badge badge-tachi">立ち飲み</span>':''}${s.tags.includes('おひとり様')?'<span class="badge badge-hitori">おひとり様OK</span>':''}${s.tags.includes('焼き鳥')?'<span class="badge badge-yakitori">焼き鳥</span>':''}${s.tags.includes('もつ焼き')?'<span class="badge badge-motsu">もつ焼き</span>':''}${s.tags.includes('おでん')?'<span class="badge badge-oden">おでん</span>':''}${s.tags.includes('地酒')?'<span class="badge badge-local">地酒あり</span>':''}${beerTag?`<span class="badge ${beerBadge[beerTag]}">${beerTag}</span>`:''}${s.smoke==='喫煙可'?'<span class="badge badge-smoking">🚬 喫煙可</span>':'<span class="badge badge-nosmoking">🚭 禁煙</span>'}</div><div class="shop-note">${s.note}</div></div>`;}).join('');}
+renderSaunas();
+</script>
+</body>
+</html>
